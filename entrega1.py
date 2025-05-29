@@ -33,7 +33,7 @@ def play_game (jedi_at, jedi_concentration, walls, droids):
             #return sum(x[2] for x in droids) #Provisional
 
 
-            return sum(max(abs(jedi[0] - x), abs(jedi[1] - y))  for (x, y, _) in droides_vivos)
+            return sum(max(abs(jedi[0] - x), abs(jedi[1] - y))  for (x, y, _) in droides_vivos)+len(droides_vivos)
 
         def result(self, state, action):
             jedi,concentration,droids = state
