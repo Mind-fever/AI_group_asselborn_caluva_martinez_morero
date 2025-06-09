@@ -25,15 +25,35 @@ def play_game (jedi_at, jedi_concentration, walls, droids):
 
             return actions
 
+
         def heuristic(self, state):
             jedi, concentration, droids = state
             droides_vivos=[(a, b,c) for (a, b, c) in droids if c > 0]
             #cant_droides_vivos = sum(1 for x in droids if x[2]>0)
-            #return cant_droides_vivos+cant_droides_vivos-1
-            #return sum(x[2] for x in droids) #Provisional
+            #return len(droides_vivos)+len(droides_vivos)-1
+            if not droides_vivos:
+                return 0
+                #return sum(x[2] for x in droids) #Provisional
 
+            distancia_cercano, coord_cercano = min(
+                ((max(abs(jedi[0] - x), abs(jedi[1] - y)), (x, y)) for (x, y, _) in droides_vivos),
+                key=lambda t: t[0]
+            )
 
-            return sum(max(abs(jedi[0] - x), abs(jedi[1] - y))  for (x, y, _) in droides_vivos)+len(droides_vivos)
+            distancia_lejano, coord_lejano = max(
+                ((max(abs(coord_cercano[0] - x), abs(coord_cercano[1] - y)), (x, y)) for (x, y, _) in droides_vivos),
+                key=lambda t: t[0]
+            )
+            costo_ataque = 0
+            for _, _, c in droides_vivos:
+                if c == 1:
+                    costo_ataque += 1
+                else:
+                    costo_ataque += 2
+
+            #positions = [jedi] + droides_vivos
+            return abs(distancia_lejano)+abs(distancia_cercano) + costo_ataque
+
 
         def result(self, state, action):
             jedi,concentration,droids = state
@@ -57,7 +77,7 @@ def play_game (jedi_at, jedi_concentration, walls, droids):
             droids_list = tuple(droids_list)
             jedi=tuple(jedi)
 
-            droids_vivos= tuple([(a, b, c) for (a, b, c) in droids_list if c > 0])
+            #droids_vivos= tuple([(a, b, c) for (a, b, c) in droids_list if c > 0])
 
             return jedi, concentration,tuple(droids_list)
 
@@ -149,21 +169,20 @@ def play_game (jedi_at, jedi_concentration, walls, droids):
     return acciones
 
 jedi_actions = play_game(
-    jedi_at=(1, 2),
-    jedi_concentration=0,
-    walls=[(0, 0), (0, 5), (1, 0), (1, 1), (1, 3), (1, 4), (1, 5), (2, 0),
-           (2, 3), (2, 5), (3, 1), (3, 2), (3, 3), (3, 5), (4, 0), (4, 5)],
-
-    #walls=[],
-    droids=[(2, 1, 2), (2, 4, 1), (4, 4, 10)],
+    jedi_at=(2, 3),
+    jedi_concentration=5,
+    walls=[(0, 1), (1, 1), (2, 1), (3, 3), (3, 4), (3, 5)],
+    droids=[
+        (0, 2, 4),
+        (1, 2, 2),
+        (1, 4, 1),
+        (3, 1, 3),
+    ],
 )
-
-print("Solution node state:")
-
-for x in jedi_actions: print(x)
-
-
-# # . . . . #
+print("Camino de acciones:")
+for accion in jedi_actions:
+    print(f"Acción: {accion}")
+# . . . . #
 # # # J # # #
 # # 2 . # 1 #
 # . # # # . #
