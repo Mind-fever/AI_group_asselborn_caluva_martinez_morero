@@ -159,7 +159,7 @@ def play_game (jedi_at, jedi_concentration, walls, droids):
     viewer = WebViewer()
     problem = jedi_problem(initial_state)
     start_time = time.time()
-    result = astar(problem, viewer=viewer)
+    result = astar(problem)
     end_time = time.time()
     #result = astar(problem, viewer=viewer)
     elapsed = end_time - start_time
