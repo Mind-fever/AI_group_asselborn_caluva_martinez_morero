@@ -159,7 +159,7 @@ def play_game (jedi_at, jedi_concentration, walls, droids):
     viewer = WebViewer()
     problem = jedi_problem(initial_state)
     start_time = time.time()
-    result = astar(problem)
+    result = astar(problem, viewer=viewer)
     end_time = time.time()
     #result = astar(problem, viewer=viewer)
     elapsed = end_time - start_time
@@ -169,16 +169,12 @@ def play_game (jedi_at, jedi_concentration, walls, droids):
     return acciones
 
 jedi_actions = play_game(
-    jedi_at=(2, 3),
-    jedi_concentration=5,
+    jedi_at=(2, 4),
+    jedi_concentration=0,
     walls=[(0, 1), (1, 1), (2, 1), (3, 3), (3, 4), (3, 5)],
-    droids=[
-        (0, 2, 4),
-        (1, 2, 2),
-        (1, 4, 1),
-        (3, 1, 3),
-    ],
+    droids=[(1, 2, 2), (1, 4, 1)]
 )
+
 print("Camino de acciones:")
 for accion in jedi_actions:
     print(f"Acción: {accion}")
